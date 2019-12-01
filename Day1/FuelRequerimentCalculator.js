@@ -3,12 +3,23 @@ function calculateFuelRequired(mass) {
   return Math.floor((mass / 3)) - 2;
 }
 
+function calculateFuelRequiredCountingWithFuel(mass) {
+  const calc = Math.floor((mass / 3)) - 2;
+  if (calc <= 0) return 0;
+  const result = calc + calculateFuelRequiredCountingWithFuel(calc);
+  return result;
+}
+
 function main() {
   const values = getValues();
-  const total = values.reduce((prev, curr) => {
+  const noFueltotal = values.reduce((prev, curr) => {
     return prev + calculateFuelRequired(curr);
   }, 0);
-  console.log(total);
+  const withFuelTotal = values.reduce((prev, curr) => {
+    return prev + calculateFuelRequiredCountingWithFuel(curr);
+  }, 0);
+  console.log('The total without adding the fuel is ' + noFueltotal);
+  console.log('The total adding the fuel is ' + withFuelTotal);
 }
 
 function getValues() {
@@ -117,7 +128,8 @@ function getValues() {
 }
 
 module.exports = {
-  calculateFuelRequired: calculateFuelRequired
+  calculateFuelRequired: calculateFuelRequired,
+  calculateFuelRequiredCountingWithFuel: calculateFuelRequiredCountingWithFuel
 }
 
 main();
